@@ -1,8 +1,10 @@
 package com.summer.blog;
 
 import com.summer.blog.dao.BlogMapper;
+import com.summer.blog.dao.TicketMapper;
 import com.summer.blog.dao.UserMapper;
 import com.summer.blog.model.Blog;
+import com.summer.blog.model.Ticket;
 import com.summer.blog.model.User;
 import com.summer.blog.service.BlogService;
 import com.summer.blog.service.UserService;
@@ -29,6 +31,22 @@ public class BlogApplicationTests {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TicketMapper ticketMapper;
+
+    @Test
+    public void ticketDaoTest() {
+        /*Ticket ticket = new Ticket();
+        ticket.setUserId(22);
+        ticket.setExpired(new Date());
+        ticket.setStatus(0);
+        ticket.setTicket("1321");
+        ticketMapper.insertSelective(ticket);*/
+        ticketMapper.setStatus("1321", 2);
+        Ticket temp = ticketMapper.selectByTicket("1321");
+        System.out.println(temp.getId() + "|" + temp.getTicket() + "| status:" + temp.getStatus());
+    }
 
     @Test
     public void userDaoTest() {

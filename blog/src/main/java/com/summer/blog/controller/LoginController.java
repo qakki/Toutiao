@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -31,13 +33,21 @@ public class LoginController {
     @ResponseBody
     public String register(Model model, @RequestParam("username") String name,
                            @RequestParam("password") String password,
-                           @RequestParam(value = "rember", defaultValue = "0") int remember) {
+                           @RequestParam(value = "rember", defaultValue = "0") int remember,
+                           HttpServletResponse response) {
         try {
-            Map<String, Object> result = userService.register(name, password);
-            if (result.isEmpty()) {
+            Map<String, Object> resp = userService.register(name, password);
+            if (resp.containsKey("ticket")) {
+                Cookie cookie = new Cookie("ticket", resp.get("ticket").toString());
+                //全站有效
+                cookie.setPath("/");
+                if (remember > 0) {
+                    cookie.setMaxAge(3600 * 24 * 7);
+                }
+                response.addCookie(cookie);
                 return BlogUtil.getJSONString(0, "注册成功");
             } else {
-                return BlogUtil.getJSONString(1, result);
+                return BlogUtil.getJSONString(1, resp);
             }
         } catch (Exception e) {
             logger.error("注册异常" + e.getMessage());

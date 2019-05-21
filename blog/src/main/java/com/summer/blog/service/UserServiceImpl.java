@@ -1,16 +1,15 @@
 package com.summer.blog.service;
 
+import com.summer.blog.dao.TicketMapper;
 import com.summer.blog.dao.UserMapper;
+import com.summer.blog.model.Ticket;
 import com.summer.blog.model.User;
 import com.summer.blog.util.BlogUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author     ：summerGit
@@ -21,6 +20,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private TicketMapper ticketMapper;
 
     @Override
     public User selectNameAndUrlById(int id) {
@@ -37,19 +39,19 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Map<String, Object> register(String name, String password) {
-        Map<String, Object> errors = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         if (StringUtils.isBlank(name)) {
-            errors.put("msgname", "用户名不能为空");
-            return errors;
+            map.put("msgname", "用户名不能为空");
+            return map;
         }
         if (StringUtils.isBlank(password)) {
-            errors.put("msgpwd", "用户密码不能为空");
-            return errors;
+            map.put("msgpwd", "用户密码不能为空");
+            return map;
         }
         User userIfEmpty = userMapper.selectByName(name);
         if (userIfEmpty != null) {
-            errors.put("msgname", "用户名已经被注册");
-            return errors;
+            map.put("msgname", "用户名已经被注册");
+            return map;
         }
 
         //可以正常注册
@@ -61,8 +63,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(BlogUtil.MD5(password + salt));
         user.setHeadUrl(head);
         userMapper.insertSelective(user);
-
-        return errors;
+        //获取用户id
+        User temp = userMapper.selectByName(name);
+        String ticket = addUserLoginTicket(temp.getId());
+        map.put("ticket", ticket);
+        return map;
     }
 
     /**
@@ -94,7 +99,29 @@ public class UserServiceImpl implements UserService {
             return map;
         }
         //正常登录
-
+        String ticket = addUserLoginTicket(userIfEmpty.getId());
+        map.put("ticket", ticket);
         return map;
+    }
+
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/21 0021
+     * @description: addUserLoginTicket
+     * @param userId
+     * @return java.lang.String ticket
+     */
+    @Override
+    public String addUserLoginTicket(int userId) {
+        Ticket ticket = new Ticket();
+        ticket.setUserId(userId);
+        String resTicket = UUID.randomUUID().toString().replaceAll("-", "");
+        ticket.setTicket(resTicket);
+        Date date = new Date();
+        date.setTime(date.getTime() + 1000 * 3600 * 24);
+        ticket.setExpired(date);
+        ticket.setStatus(0);
+        ticketMapper.insertSelective(ticket);
+        return resTicket;
     }
 }

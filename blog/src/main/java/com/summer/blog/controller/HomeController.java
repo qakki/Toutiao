@@ -8,8 +8,10 @@ import com.summer.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +29,24 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String index(Model model) {
-        List<Blog> blogs = blogService.selectByUserIdAndTimeDesc(0, 1, 10);
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+    public String index(Model model,
+                        @RequestParam(value = "pop", defaultValue = "0") int pop) {
+        List<ViewObject> list = getNews(0, 1, 10);
+        model.addAttribute("vos", list);
+        model.addAttribute("pop", pop);
+        return "home";
+    }
+
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public String userIndex(Model model, @PathVariable int userId) {
+        List<ViewObject> list = getNews(0, 1, 10);
+        model.addAttribute("vos", list);
+        return "home";
+    }
+
+    private List<ViewObject> getNews(int userId, int offset, int limit) {
+        List<Blog> blogs = blogService.selectByUserIdAndTimeDesc(userId, offset, limit);
         List<ViewObject> list = new ArrayList<>();
         for (Blog blog : blogs) {
             User user = userService.selectNameAndUrlById(blog.getUserId());
@@ -38,14 +55,6 @@ public class HomeController {
             homeView.set("user", user);
             list.add(homeView);
         }
-        model.addAttribute("vos", list);
-        return "home";
+        return list;
     }
-
-    @RequestMapping(value = "/sayHi", method = RequestMethod.GET)
-    public String sayHi(Model model) {
-        model.addAttribute("hello", "hello world");
-        return "hi";
-    }
-
 }
