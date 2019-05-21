@@ -64,4 +64,37 @@ public class UserServiceImpl implements UserService {
 
         return errors;
     }
+
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/21 0021
+     * @description: 登录
+     * @param name
+     * @param password
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     */
+    @Override
+    public Map<String, Object> login(String name, String password) {
+        Map<String, Object> map = new HashMap<>();
+        if (StringUtils.isBlank(name)) {
+            map.put("msgname", "用户名不能为空");
+            return map;
+        }
+        if (StringUtils.isBlank(password)) {
+            map.put("msgpwd", "用户密码不能为空");
+            return map;
+        }
+        User userIfEmpty = userMapper.selectByName(name);
+        if (userIfEmpty == null) {
+            map.put("msgname", "用户名不存在");
+            return map;
+        }
+        if (!userIfEmpty.getPassword().equals(BlogUtil.MD5(password + userIfEmpty.getSalt()))) {
+            map.put("msgpwd", "密码不正确");
+            return map;
+        }
+        //正常登录
+
+        return map;
+    }
 }

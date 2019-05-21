@@ -13,4 +13,6 @@ public interface UserService {
     User selectNameAndUrlById(int id);
 
     Map<String, Object> register(String name, String password);
+
+    Map<String, Object> login(String name, String password);
 }
