@@ -21,4 +21,6 @@ public interface UserMapper {
 
     User selectNameAndUrlById(Integer id);
 
+    User selectByName(String name);
+
 }

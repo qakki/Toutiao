@@ -2,6 +2,8 @@ package com.summer.blog.service;
 
 import com.summer.blog.model.User;
 
+import java.util.Map;
+
 /**
  * @author     ：summerGit
  * @date       ：2019/5/20 0020
@@ -9,4 +11,6 @@ import com.summer.blog.model.User;
  */
 public interface UserService {
     User selectNameAndUrlById(int id);
+
+    Map<String, Object> register(String name, String password);
 }

@@ -5,6 +5,7 @@ import com.summer.blog.dao.UserMapper;
 import com.summer.blog.model.Blog;
 import com.summer.blog.model.User;
 import com.summer.blog.service.BlogService;
+import com.summer.blog.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,19 @@ public class BlogApplicationTests {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private UserService userService;
+
+    @Test
+    public void userDaoTest() {
+        System.out.println(userMapper.selectByName("summer").getId());
+    }
+
+    @Test
+    public void judgeRegister() {
+        userService.register("念奴娇", "12345678912345");
+    }
 
     @Test
     public void contextLoads() {

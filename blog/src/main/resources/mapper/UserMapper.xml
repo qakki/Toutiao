@@ -31,6 +31,12 @@
         from tb_user
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectByName" parameterType="java.lang.String" resultType="com.summer.blog.model.User">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user
+        where name = #{name}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_user
     where id = #{id,jdbcType=INTEGER}
