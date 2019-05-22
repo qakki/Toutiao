@@ -35,6 +35,7 @@ public class PassportInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String ticket = null;
+        //从cookie拿出
         if (httpServletRequest.getCookies() != null) {
             for (Cookie cookie : httpServletRequest.getCookies()) {
                 if (cookie.getName().equals("ticket")) {
@@ -43,6 +44,7 @@ public class PassportInterceptor implements HandlerInterceptor {
                 }
             }
         }
+        //验证ticket身份
         if (ticket != null) {
             Ticket ticket1 = ticketMapper.selectByTicket(ticket);
             if (ticket1 == null || ticket1.getExpired().before(new Date()) || ticket1.getStatus() != 0) {
@@ -57,7 +59,9 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-
+        if (modelAndView != null && hostHolder.getUser() != null) {
+            modelAndView.addObject("user", hostHolder.getUser());
+        }
     }
 
     @Override

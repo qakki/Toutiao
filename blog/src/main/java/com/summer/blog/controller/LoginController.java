@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +26,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/reg/", method = RequestMethod.GET)
+    @RequestMapping(value = "/reg/", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String register(Model model, @RequestParam("username") String name,
                            @RequestParam("password") String password,
@@ -53,5 +50,37 @@ public class LoginController {
             logger.error("注册异常" + e.getMessage());
             return BlogUtil.getJSONString(1, "注册异常");
         }
+    }
+
+    @RequestMapping(value = "/login/", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String login(Model model, @RequestParam("username") String name,
+                        @RequestParam("password") String password,
+                        @RequestParam(value = "rember", defaultValue = "0") int remember,
+                        HttpServletResponse response) {
+        try {
+            Map<String, Object> resp = userService.login(name, password);
+            if (resp.containsKey("ticket")) {
+                Cookie cookie = new Cookie("ticket", resp.get("ticket").toString());
+                //全站有效
+                cookie.setPath("/");
+                if (remember > 0) {
+                    cookie.setMaxAge(3600 * 24 * 7);
+                }
+                response.addCookie(cookie);
+                return BlogUtil.getJSONString(0, "登录成功");
+            } else {
+                return BlogUtil.getJSONString(1, resp);
+            }
+        } catch (Exception e) {
+            logger.error("登录异常" + e.getMessage());
+            return BlogUtil.getJSONString(1, "登录异常");
+        }
+    }
+
+    @RequestMapping(value = "/logout/", method = {RequestMethod.GET, RequestMethod.POST})
+    public String logout(@CookieValue("ticket") String ticket) {
+        userService.logout(ticket);
+        return "redirect:/";
     }
 }
