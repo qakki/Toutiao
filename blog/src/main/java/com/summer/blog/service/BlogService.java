@@ -1,6 +1,7 @@
 package com.summer.blog.service;
 
 import com.summer.blog.model.Blog;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,5 +11,7 @@ import java.util.List;
  * @description：
  */
 public interface BlogService {
-    List<Blog> selectByUserIdAndTimeDesc(int id,int page,int size);
+    List<Blog> selectByUserIdAndTimeDesc(int id, int page, int size);
+
+    String saveImage(MultipartFile file);
 }

@@ -15,6 +15,17 @@ import java.util.Map;
 public class BlogUtil {
     private static final Logger logger = LoggerFactory.getLogger(BlogUtil.class);
 
+    private static String[] IMAGE_FILE_EXT = {"png", "bmp", "jpg", "jpeg"};
+
+    public static boolean isFileAllowed(String fileExt) {
+        for (String ext : IMAGE_FILE_EXT) {
+            if (ext.equals(fileExt)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @author: lightingSummer
      * @date: 2019/5/21 0021

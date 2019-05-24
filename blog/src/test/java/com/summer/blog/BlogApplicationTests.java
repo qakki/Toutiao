@@ -8,6 +8,9 @@ import com.summer.blog.model.Ticket;
 import com.summer.blog.model.User;
 import com.summer.blog.service.BlogService;
 import com.summer.blog.service.UserService;
+import com.summer.blog.util.HDFSUtil;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,23 @@ public class BlogApplicationTests {
 
     @Autowired
     private TicketMapper ticketMapper;
+
+
+    @Test
+    public void hdfs() {
+        try {
+            FileSystem fs = HDFSUtil.getFileSystem();
+            Path path = new Path("/javaTest");
+            if (fs.mkdirs(path)) {
+                System.out.println("ok");
+            } else {
+                System.out.println("fail");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("fail");
+        }
+    }
 
     @Test
     public void ticketDaoTest() {
