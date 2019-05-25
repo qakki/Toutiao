@@ -14,4 +14,6 @@ public interface BlogService {
     List<Blog> selectByUserIdAndTimeDesc(int id, int page, int size);
 
     String saveImage(MultipartFile file);
+
+    void saveBlog(Blog blog);
 }

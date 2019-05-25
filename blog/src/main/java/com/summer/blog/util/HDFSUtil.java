@@ -11,7 +11,7 @@ import java.net.URI;
 /**
  * @author     ：summerGit
  * @date       ：2019/5/24 0024
- * @description：
+ * @description： 项目最后没有用虚拟机hadoop-hdfs存储
  */
 @Component
 public class HDFSUtil {

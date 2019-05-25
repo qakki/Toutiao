@@ -40,7 +40,7 @@ public class HomeController {
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public String userIndex(Model model, @PathVariable int userId) {
-        List<ViewObject> list = getNews(0, 1, 10);
+        List<ViewObject> list = getNews(userId, 1, 10);
         model.addAttribute("vos", list);
         return "home";
     }

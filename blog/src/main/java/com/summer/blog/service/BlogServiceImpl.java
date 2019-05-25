@@ -5,17 +5,16 @@ import com.summer.blog.dao.BlogMapper;
 import com.summer.blog.model.Blog;
 import com.summer.blog.util.BlogUtil;
 import com.summer.blog.util.HDFSUtil;
-import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +26,10 @@ import java.util.UUID;
 @Service
 public class BlogServiceImpl implements BlogService {
     private static final Logger logger = LoggerFactory.getLogger(BlogServiceImpl.class);
-    private static final String IMAGE_DIR = "/javaTest/";
-    private static final String BLOG_DOMIN = "http://127.0.0.1:8080";
+    //hdfs
+    private static final String HDFS_IMAGE_DIR = "/javaTest/";
+    private static final String BLOG_DOMIN = "http://127.0.0.1:8080/image/";
+    private static final String NATIVE_IMAGE_DIR = "E:/JavaTest/";
 
     @Autowired
     private BlogMapper blogMapper;
@@ -69,15 +70,24 @@ public class BlogServiceImpl implements BlogService {
         try {
             FileSystem fileSystem = HDFSUtil.getFileSystem();
             String fileName = UUID.randomUUID().toString().replaceAll("-", "") + "." + fileExt;
-            InputStream in = file.getInputStream();
-            FSDataOutputStream out = fileSystem.create(new Path(IMAGE_DIR + fileName), true);
-            IOUtils.copyBytes(in, out, 4096, true);
-            return BLOG_DOMIN + "image?name=" + fileName;
+            //最后没用hdfs存储
+            //InputStream in = file.getInputStream();
+            //FSDataOutputStream out = fileSystem.create(new Path(HDFS_IMAGE_DIR + fileName), true);
+            //IOUtils.copyBytes(in, out, 4096, true);
+            //return BLOG_DOMIN + "image?name=" + fileName;
+            Files.copy(file.getInputStream(), new File(NATIVE_IMAGE_DIR + fileName).toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+            return BLOG_DOMIN + "?name=" + fileName;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
 
+    }
+
+    @Override
+    public void saveBlog(Blog blog) {
+        blogMapper.insertSelective(blog);
     }
 
 }
