@@ -16,4 +16,6 @@ public interface BlogService {
     String saveImage(MultipartFile file);
 
     void saveBlog(Blog blog);
+
+    String selectLinkById(int id);
 }

@@ -5,6 +5,7 @@ import com.summer.blog.model.User;
 import com.summer.blog.model.ViewObject;
 import com.summer.blog.service.BlogService;
 import com.summer.blog.service.UserService;
+import com.summer.blog.util.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +54,7 @@ public class HomeController {
             ViewObject homeView = new ViewObject();
             homeView.set("news", blog);
             homeView.set("user", user);
+            homeView.set("domain", SettingUtil.BLOG_DOMAIN + "news/");
             list.add(homeView);
         }
         return list;

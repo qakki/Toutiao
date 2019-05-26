@@ -3,16 +3,14 @@ package com.summer.blog.controller;
 import com.summer.blog.model.Blog;
 import com.summer.blog.model.HostHolder;
 import com.summer.blog.service.BlogService;
+import com.summer.blog.service.QiniuService;
 import com.summer.blog.util.BlogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +34,15 @@ public class BlogController {
     @Autowired
     private HostHolder hostHolder;
 
+    @Autowired
+    private QiniuService qiniuService;
+
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String fileUrl = blogService.saveImage(file);
+            //String fileUrl = blogService.saveImage(file);
+            String fileUrl = qiniuService.uploadImage(file);
             if (fileUrl == null) {
                 return BlogUtil.getJSONString(1, "上传失败");
             }
@@ -84,6 +86,22 @@ public class BlogController {
             response.setContentType("image/jpeg");
             StreamUtils.copy(new FileInputStream(new File("E:/JavaTest/" + imageName)), response.getOutputStream());
         } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
+    @ResponseBody
+    public void news(@PathVariable int newsId,
+                     HttpServletResponse response) {
+        String link = blogService.selectLinkById(newsId);
+        try {
+            if (link != null) {
+                response.sendRedirect(link);
+            } else {
+                response.sendRedirect("/error.html");
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }

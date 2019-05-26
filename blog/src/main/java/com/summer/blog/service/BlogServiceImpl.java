@@ -5,6 +5,7 @@ import com.summer.blog.dao.BlogMapper;
 import com.summer.blog.model.Blog;
 import com.summer.blog.util.BlogUtil;
 import com.summer.blog.util.HDFSUtil;
+import com.summer.blog.util.SettingUtil;
 import org.apache.hadoop.fs.FileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,6 @@ import java.util.UUID;
 public class BlogServiceImpl implements BlogService {
     private static final Logger logger = LoggerFactory.getLogger(BlogServiceImpl.class);
     //hdfs
-    private static final String HDFS_IMAGE_DIR = "/javaTest/";
-    private static final String BLOG_DOMIN = "http://127.0.0.1:8080/image/";
-    private static final String NATIVE_IMAGE_DIR = "E:/JavaTest/";
 
     @Autowired
     private BlogMapper blogMapper;
@@ -74,10 +72,10 @@ public class BlogServiceImpl implements BlogService {
             //InputStream in = file.getInputStream();
             //FSDataOutputStream out = fileSystem.create(new Path(HDFS_IMAGE_DIR + fileName), true);
             //IOUtils.copyBytes(in, out, 4096, true);
-            //return BLOG_DOMIN + "image?name=" + fileName;
-            Files.copy(file.getInputStream(), new File(NATIVE_IMAGE_DIR + fileName).toPath(),
+            //return IMAGE_BLOG_DOMIN + "image?name=" + fileName;
+            Files.copy(file.getInputStream(), new File(SettingUtil.NATIVE_IMAGE_DIR + fileName).toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
-            return BLOG_DOMIN + "?name=" + fileName;
+            return SettingUtil.IMAGE_BLOG_DOMIN + "?name=" + fileName;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
@@ -88,6 +86,11 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void saveBlog(Blog blog) {
         blogMapper.insertSelective(blog);
+    }
+
+    @Override
+    public String selectLinkById(int id) {
+        return blogMapper.selectLinkById(id);
     }
 
 }

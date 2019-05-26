@@ -90,11 +90,11 @@
                         </div>
                         <div class="content-main">
                             <h3 class="title">
-                                <a href="/news/$!{vo.news.id}" rel="external nofollow"
+                                <a href=$!{vo.news.link} rel="external nofollow"
                                    target="_blank">$!{vo.news.title}</a>
                             </h3>
                             <div class="meta">
-                                $!{vo.news.link}
+                                $!{vo.domain}$!{vo.news.id}
                                 <span>
                                             <i class="fa icon-comment"></i> $!{vo.news.commentCount}
                                         </span>

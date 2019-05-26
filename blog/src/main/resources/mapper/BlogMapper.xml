@@ -23,9 +23,10 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <sql id="Main_Page_List">
-     title, link, image, like_count,comment_count, mod_time, user_id
+     id,title, link, image, like_count,comment_count, mod_time, user_id
   </sql>
     <resultMap id="Main_Page_Map" type="com.summer.blog.model.Blog">
+        <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="title" property="title"/>
         <result column="link" property="link"/>
         <result column="image" property="image"/>
@@ -44,6 +45,14 @@
         </if>
         is_del=0
         order by mod_time desc
+    </select>
+    <select id="selectLinkById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select
+        link
+        from tb_blog
+        where
+        id=#{id} and
+        is_del=0
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

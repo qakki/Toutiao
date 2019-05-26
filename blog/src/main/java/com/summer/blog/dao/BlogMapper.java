@@ -22,4 +22,6 @@ public interface BlogMapper {
     int updateByPrimaryKey(Blog record);
 
     List<Blog> selectByUserIdAndModTimeDesc(Integer userId);
+
+    String selectLinkById(Integer id);
 }
