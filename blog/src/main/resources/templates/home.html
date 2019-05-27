@@ -1,6 +1,9 @@
 #parse("header.html")
-
+<!--
+<audio autoplay="autoplay" loop="loop" preload="auto"
+       src="http://ps2a1gxx1.bkt.clouddn.com/%E8%B5%B7%E9%A3%8E%E4%BA%86.mp3"></audio>-->
 <div id="main">
+
     <!--
         <div class="hero">
             <div class="container-fluid">
@@ -90,7 +93,7 @@
                         </div>
                         <div class="content-main">
                             <h3 class="title">
-                                <a href=$!{vo.news.link} rel="external nofollow"
+                                <a href=$!{vo.domain}$!{vo.news.id} rel="external nofollow"
                                    target="_blank">$!{vo.news.title}</a>
                             </h3>
                             <div class="meta">

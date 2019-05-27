@@ -18,4 +18,8 @@ public interface BlogService {
     void saveBlog(Blog blog);
 
     String selectLinkById(int id);
+
+    Blog selectAllById(int id);
+
+    void updateById(Blog blog);
 }

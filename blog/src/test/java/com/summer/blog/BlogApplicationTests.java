@@ -3,12 +3,12 @@ package com.summer.blog;
 import com.summer.blog.dao.BlogMapper;
 import com.summer.blog.dao.TicketMapper;
 import com.summer.blog.dao.UserMapper;
-import com.summer.blog.model.Blog;
-import com.summer.blog.model.Ticket;
-import com.summer.blog.model.User;
+import com.summer.blog.model.*;
 import com.summer.blog.service.BlogService;
+import com.summer.blog.service.CommentService;
 import com.summer.blog.service.UserService;
 import com.summer.blog.util.HDFSUtil;
+import junit.framework.Assert;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.junit.Test;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,6 +38,28 @@ public class BlogApplicationTests {
 
     @Autowired
     private TicketMapper ticketMapper;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Test
+    public void commentTest1() {
+        System.out.println(commentService.getCommentCount(9, 0));
+    }
+
+
+    @Test
+    public void commentTest() {
+        Comment comment = new Comment();
+        comment.setUserId(16);
+        comment.setEntityType(EntityType.ENTITY_NEWS);
+        comment.setEntityId(9);
+        comment.setAddTime(new Date());
+        comment.setContent("悬崖上的金鱼公主");
+        commentService.addComment(comment);
+
+        Assert.assertNotNull(commentService.getCommentByEntity(9, EntityType.ENTITY_NEWS));
+    }
 
 
     @Test

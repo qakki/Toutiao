@@ -93,4 +93,14 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.selectLinkById(id);
     }
 
+    @Override
+    public Blog selectAllById(int id) {
+        return blogMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void updateById(Blog blog) {
+        blogMapper.updateByPrimaryKeySelective(blog);
+    }
+
 }

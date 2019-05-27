@@ -1,14 +1,16 @@
 package com.summer.blog.controller;
 
-import com.summer.blog.model.Blog;
-import com.summer.blog.model.HostHolder;
+import com.summer.blog.model.*;
 import com.summer.blog.service.BlogService;
+import com.summer.blog.service.CommentService;
 import com.summer.blog.service.QiniuService;
+import com.summer.blog.service.UserService;
 import com.summer.blog.util.BlogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author     ：summerGit
@@ -30,12 +34,14 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
-
     @Autowired
     private HostHolder hostHolder;
-
     @Autowired
     private QiniuService qiniuService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
@@ -90,19 +96,52 @@ public class BlogController {
         }
     }
 
-    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
-    @ResponseBody
-    public void news(@PathVariable int newsId,
-                     HttpServletResponse response) {
-        String link = blogService.selectLinkById(newsId);
+    @RequestMapping(value = "/addComment", method = RequestMethod.POST)
+    public String addComment(@RequestParam("newsId") int newsId, @RequestParam("content") String content) {
         try {
-            if (link != null) {
-                response.sendRedirect(link);
+            Comment comment = new Comment();
+            comment.setContent(content);
+            comment.setAddTime(new Date());
+            comment.setEntityId(newsId);
+            comment.setEntityType(EntityType.ENTITY_NEWS);
+            comment.setUserId(hostHolder.getUser().getId());
+            commentService.addComment(comment);
+            Blog blog = new Blog();
+            blog.setCommentCount(commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS));
+            blog.setId(newsId);
+            blogService.updateById(blog);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return "redirect:/news/" + newsId;
+    }
+
+    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
+    public String news(@PathVariable int newsId, Model model) {
+        Blog blog = blogService.selectAllById(newsId);
+        try {
+            if (blog != null) {
+                User user = userService.selectNameAndUrlById(blog.getUserId());
+                model.addAttribute("news", blog);
+                model.addAttribute("owner", user);
+
+                List<Comment> comments = commentService.getCommentByEntity(blog.getId(), EntityType.ENTITY_NEWS);
+                List<ViewObject> list = new ArrayList<>();
+                for (Comment comment : comments) {
+                    User user1 = userService.selectNameAndUrlById(comment.getUserId());
+                    ViewObject viewObject = new ViewObject();
+                    viewObject.set("user", user1);
+                    viewObject.set("comment", comment);
+                    list.add(viewObject);
+                }
+                model.addAttribute("comments", list);
+                return "detail";
             } else {
-                response.sendRedirect("/error.html");
+                return "error";
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
+            return "error";
         }
     }
 }
