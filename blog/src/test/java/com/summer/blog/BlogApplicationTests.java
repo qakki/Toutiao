@@ -6,6 +6,7 @@ import com.summer.blog.dao.UserMapper;
 import com.summer.blog.model.*;
 import com.summer.blog.service.BlogService;
 import com.summer.blog.service.CommentService;
+import com.summer.blog.service.MessageService;
 import com.summer.blog.service.UserService;
 import com.summer.blog.util.HDFSUtil;
 import junit.framework.Assert;
@@ -41,6 +42,15 @@ public class BlogApplicationTests {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Test
+    public void MessageTest() {
+        System.out.println(messageService.getUnreadMsgByUserId(11, "11_16"));
+        System.out.println(messageService.getMessageByUserId(16, 1, 10));
+    }
 
     @Test
     public void commentTest1() {

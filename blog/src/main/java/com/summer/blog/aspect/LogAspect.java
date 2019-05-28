@@ -35,8 +35,9 @@ public class LogAspect {
     @Before(value = "daoPc()||controllerPc()||servicePc()")
     public void before(JoinPoint jp) {
         StringBuilder sb = new StringBuilder();
+        sb.append("The params is ");
         for (Object arg : jp.getArgs()) {
-            sb.append("arg:" + arg.toString() + "|");
+            sb.append(arg.getClass() + ":" + arg.toString() + ",");
         }
         String name = jp.getSignature().getName();
         logger.info(name + " started. " + sb.toString());

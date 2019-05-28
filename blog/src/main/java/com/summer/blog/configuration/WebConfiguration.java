@@ -21,10 +21,18 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     private LoginRequiredInterceptor loginRequiredInterceptor;
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/27 0027
+     * @description: filter 拦截器
+     * @param registry
+     * @return void
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor);
-        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting*");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/msg*");
         super.addInterceptors(registry);
     }
 }

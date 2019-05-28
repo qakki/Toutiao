@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.blog.dao.MessageMapper">
+    <resultMap id="BaseResultMap" type="com.summer.blog.model.Message">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="from_id" jdbcType="INTEGER" property="fromId"/>
+        <result column="to_id" jdbcType="INTEGER" property="toId"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="has_read" jdbcType="INTEGER" property="hasRead"/>
+        <result column="conversation_id" jdbcType="VARCHAR" property="conversationId"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.summer.blog.model.Message">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, from_id, to_id,content, created_date, has_read, conversation_id
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_message
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByConversionId" resultType="com.summer.blog.model.Message">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_message
+        where conversation_id=#{conversationId}
+        order by created_date desc
+    </select>
+    <select id="selectByUserId" resultType="com.summer.blog.model.Message">
+       select     count(id) as id, from_id, to_id,content, created_date, has_read, conversation_id
+       from (select * from tb_message where from_id=#{userId} or to_id=#{userId} order by id desc) tt
+       group by conversation_id order by id desc
+    </select>
+    <select id="selectUnreadCount" resultType="java.lang.Integer">
+        select count(0)
+        from tb_message
+        where to_id=#{userId} and conversation_id=#{conversationId} and has_read=0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.summer.blog.model.Message">
+    insert into tb_message (id, from_id, to_id, 
+      created_date, has_read, conversation_id, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{fromId,jdbcType=INTEGER}, #{toId,jdbcType=INTEGER}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{hasRead,jdbcType=INTEGER}, #{conversationId,jdbcType=VARCHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.summer.blog.model.Message">
+        insert into tb_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fromId != null">
+                from_id,
+            </if>
+            <if test="toId != null">
+                to_id,
+            </if>
+            <if test="createdDate != null">
+                created_date,
+            </if>
+            <if test="hasRead != null">
+                has_read,
+            </if>
+            <if test="conversationId != null">
+                conversation_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="fromId != null">
+                #{fromId,jdbcType=INTEGER},
+            </if>
+            <if test="toId != null">
+                #{toId,jdbcType=INTEGER},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="hasRead != null">
+                #{hasRead,jdbcType=INTEGER},
+            </if>
+            <if test="conversationId != null">
+                #{conversationId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.summer.blog.model.Message">
+        update tb_message
+        <set>
+            <if test="fromId != null">
+                from_id = #{fromId,jdbcType=INTEGER},
+            </if>
+            <if test="toId != null">
+                to_id = #{toId,jdbcType=INTEGER},
+            </if>
+            <if test="createdDate != null">
+                created_date = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="hasRead != null">
+                has_read = #{hasRead,jdbcType=INTEGER},
+            </if>
+            <if test="conversationId != null">
+                conversation_id = #{conversationId,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.summer.blog.model.Message">
+    update tb_message
+    set from_id = #{fromId,jdbcType=INTEGER},
+      to_id = #{toId,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      has_read = #{hasRead,jdbcType=INTEGER},
+      conversation_id = #{conversationId,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.summer.blog.model.Message">
+    update tb_message
+    set from_id = #{fromId,jdbcType=INTEGER},
+      to_id = #{toId,jdbcType=INTEGER},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      has_read = #{hasRead,jdbcType=INTEGER},
+      conversation_id = #{conversationId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
