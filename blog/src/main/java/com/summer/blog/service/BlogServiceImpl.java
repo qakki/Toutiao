@@ -103,4 +103,12 @@ public class BlogServiceImpl implements BlogService {
         blogMapper.updateByPrimaryKeySelective(blog);
     }
 
+    @Override
+    public void updateLikeCount(int id, String likeCount) {
+        Blog blog = new Blog();
+        blog.setId(id);
+        blog.setLikeCount(likeCount);
+        blogMapper.updateByPrimaryKeySelective(blog);
+    }
+
 }

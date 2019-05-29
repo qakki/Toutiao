@@ -1,10 +1,7 @@
 package com.summer.blog.controller;
 
 import com.summer.blog.model.*;
-import com.summer.blog.service.BlogService;
-import com.summer.blog.service.CommentService;
-import com.summer.blog.service.QiniuService;
-import com.summer.blog.service.UserService;
+import com.summer.blog.service.*;
 import com.summer.blog.util.BlogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,14 +31,21 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
     @Autowired
     private HostHolder hostHolder;
+
     @Autowired
     private QiniuService qiniuService;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
@@ -119,11 +123,18 @@ public class BlogController {
     @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
     public String news(@PathVariable int newsId, Model model) {
         Blog blog = blogService.selectAllById(newsId);
+        int nowId = hostHolder.getUser() == null ? 0 : hostHolder.getUser().getId();
         try {
             if (blog != null) {
                 User user = userService.selectNameAndUrlById(blog.getUserId());
                 model.addAttribute("news", blog);
                 model.addAttribute("owner", user);
+
+                if (nowId != 0) {
+                    model.addAttribute("like", likeService.likeStatus(nowId, EntityType.ENTITY_NEWS, blog.getId()));
+                } else {
+                    model.addAttribute("like", 0);
+                }
 
                 List<Comment> comments = commentService.getCommentByEntity(blog.getId(), EntityType.ENTITY_NEWS);
                 List<ViewObject> list = new ArrayList<>();

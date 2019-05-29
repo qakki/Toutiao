@@ -22,4 +22,6 @@ public interface BlogService {
     Blog selectAllById(int id);
 
     void updateById(Blog blog);
+
+    void updateLikeCount(int id, String likeCount);
 }

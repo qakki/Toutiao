@@ -1,9 +1,6 @@
 #parse("header.html")
-<!--
-<audio autoplay="autoplay" loop="loop" preload="auto"
-       src="http://ps2a1gxx1.bkt.clouddn.com/%E8%B5%B7%E9%A3%8E%E4%BA%86.mp3"></audio>-->
-<div id="main">
 
+<div id="main">
     <!--
         <div class="hero">
             <div class="container-fluid">
@@ -82,10 +79,20 @@
                 #end
                 <div class="post">
                     <div class="votebar">
-                        <button aria-pressed="false" class="click-like up" title="赞同"><i class="vote-arrow"></i><span
-                                class="count">$!{vo.news.likeCount}</span></button>
-                        <button aria-pressed="true" class="click-dislike down" title="反对"><i class="vote-arrow"></i>
-                        </button>
+                        #if ($vo.like > 0)
+                        <button class="click-like up pressed" data-id="$!{vo.news.id}" title="赞同"><i
+                                class="vote-arrow"></i><span class="count">$!{vo.news.likeCount}</span></button>
+                        #else
+                        <button class="click-like up" data-id="$!{vo.news.id}" title="赞同"><i
+                                class="vote-arrow"></i><span class="count">$!{vo.news.likeCount}</span></button>
+                        #end
+                        #if($vo.like < 0)
+                        <button class="click-dislike down pressed" data-id="$!{vo.news.id}" title="反对"><i
+                                class="vote-arrow"></i></button>
+                        #else
+                        <button class="click-dislike down" data-id="$!{vo.news.id}" title="反对"><i
+                                class="vote-arrow"></i></button>
+                        #end
                     </div>
                     <div class="content" data-url="/news/$!{news.id}">
                         <div>
@@ -149,6 +156,7 @@
     window.loginpop = $
     !{pop};
 </script>
+<script type="text/javascript" src="/scripts/main/site/home.js"></script>
 #end
 
 #parse("footer.html")

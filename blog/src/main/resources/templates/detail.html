@@ -4,13 +4,22 @@
         <div class="post detail">
 
             <div class="votebar">
-                <button aria-pressed="false" class="click-like up" title="赞同"><i class="vote-arrow"></i><span
+                #if($like>0)
+                <button class="click-like up pressed" data-id="$!{news.id}" title="赞同"><i class="vote-arrow"></i><span
                         class="count">$!{news.likeCount}</span></button>
-                <button aria-pressed="true" class="click-dislike down" title="反对"><i class="vote-arrow"></i>
+                #else
+                <button class="click-like up" data-id="$!{news.id}" title="赞同"><i class="vote-arrow"></i><span
+                        class="count">$!{news.likeCount}</span></button>
+                #end
+                #if($like<0)
+                <button class="click-dislike down pressed" data-id="$!{news.id}" title="反对"><i class="vote-arrow"></i>
                 </button>
+                #else
+                <button class="click-dislike down" data-id="$!{news.id}" title="反对"><i class="vote-arrow"></i></button>
+                #end
             </div>
 
-            <div class="content" data-url="http://nowcoder.com/posts/5l3hjr">
+            <div class="content">
                 <div class="content-img">
                     <img alt="" class="content-img" src="$!{news.image}">
                 </div>
@@ -28,8 +37,7 @@
             </div>
             <div class="user-info">
                 <div class="user-avatar">
-                    <a href="http://nowcoder.com/u/125701"><img class="img-circle" src="${owner.headUrl}"
-                                                                width="32"></a>
+                    <a href="/user/$!{owner.id}"><img class="img-circle" src="$!{owner.headUrl}" width="32"></a>
                 </div>
                 <!--
                 <div class="info">
@@ -66,11 +74,11 @@
             #if($user)
             <span>评论 ($!{news.commentCount})</span>
             <form action="/addComment" method="post">
+                <input name="newsId" type="hidden" value="$!{news.id}">
+
                 <div class="form-group text required comment_content">
                     <label class="text required sr-only">
-                        <abbr title="required">*</abbr> 评论
-                    </label>
-                    <input name="newsId" type="hidden" value="$!{news.id}"/>
+                        <abbr title="required">*</abbr> 评论</label>
                     <textarea class="text required comment-content form-control" id="content" name="content"
                               rows="5"></textarea>
                 </div>
@@ -88,7 +96,7 @@
         <div class="comments" id="comments">
             #foreach($commentvo in $comments)
             <div class="media">
-                <a class="media-left" href="http://nowcoder.com/u/210176">
+                <a class="media-left" href="/user/$!{commentvo.user.id}">
                     <img src="$!{commentvo.user.headUrl}">
                 </a>
                 <div class="media-body">
@@ -143,7 +151,8 @@
             });
 
         })
-    </script>
-</div>
 
+    </script>
+    <script src="/scripts/main/site/detail.js" type="text/javascript"></script>
+</div>
 #parse("footer.html")

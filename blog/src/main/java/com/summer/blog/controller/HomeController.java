@@ -1,9 +1,8 @@
 package com.summer.blog.controller;
 
-import com.summer.blog.model.Blog;
-import com.summer.blog.model.User;
-import com.summer.blog.model.ViewObject;
+import com.summer.blog.model.*;
 import com.summer.blog.service.BlogService;
+import com.summer.blog.service.LikeService;
 import com.summer.blog.service.UserService;
 import com.summer.blog.util.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,15 @@ public class HomeController {
 
     @Autowired
     private BlogService blogService;
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HostHolder hostHolder;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model,
@@ -48,6 +54,7 @@ public class HomeController {
 
     private List<ViewObject> getNews(int userId, int offset, int limit) {
         List<Blog> blogs = blogService.selectByUserIdAndTimeDesc(userId, offset, limit);
+        int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
         List<ViewObject> list = new ArrayList<>();
         for (Blog blog : blogs) {
             User user = userService.selectNameAndUrlById(blog.getUserId());
@@ -55,6 +62,11 @@ public class HomeController {
             homeView.set("news", blog);
             homeView.set("user", user);
             homeView.set("domain", SettingUtil.BLOG_DOMAIN + "news/");
+            if (localUserId != 0) {
+                homeView.set("like", likeService.likeStatus(localUserId, EntityType.ENTITY_NEWS, blog.getId()));
+            } else {
+                homeView.set("like", 0);
+            }
             list.add(homeView);
         }
         return list;

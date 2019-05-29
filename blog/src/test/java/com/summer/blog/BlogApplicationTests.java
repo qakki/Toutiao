@@ -9,6 +9,7 @@ import com.summer.blog.service.CommentService;
 import com.summer.blog.service.MessageService;
 import com.summer.blog.service.UserService;
 import com.summer.blog.util.HDFSUtil;
+import com.summer.blog.util.JedisAdapter;
 import junit.framework.Assert;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -45,6 +46,18 @@ public class BlogApplicationTests {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private JedisAdapter jedisAdapter;
+
+    /*
+    @Test
+    public void RedisTest() {
+        Jedis jedis = redisService.getInstance();
+        jedis.flushAll();
+        jedis.set("hello", "world");
+        System.out.println(jedis.get("hello"));
+    }*/
 
     @Test
     public void MessageTest() {
