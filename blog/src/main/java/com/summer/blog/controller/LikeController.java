@@ -1,5 +1,9 @@
 package com.summer.blog.controller;
 
+import com.summer.blog.async.EventModel;
+import com.summer.blog.async.EventProducer;
+import com.summer.blog.async.EventType;
+import com.summer.blog.model.Blog;
 import com.summer.blog.model.EntityType;
 import com.summer.blog.model.HostHolder;
 import com.summer.blog.service.BlogService;
@@ -32,6 +36,9 @@ public class LikeController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(value = "/like", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String like(@RequestParam("newsId") int newsId) {
@@ -39,6 +46,16 @@ public class LikeController {
             int userId = hostHolder.getUser().getId();
             long likeCount = likeService.like(userId, EntityType.ENTITY_NEWS, newsId);
             blogService.updateLikeCount(newsId, String.valueOf(likeCount));
+            Blog blog = blogService.selectAllById(newsId);
+
+            EventModel model = new EventModel();
+            model.setType(EventType.LIKE);
+            model.setActorId(hostHolder.getUser().getId());
+            model.setEntityType(EntityType.ENTITY_NEWS);
+            model.setEntityId(newsId);
+            model.setEntityOwnerId(blog.getUserId());
+            eventProducer.addEvent(model);
+
             return BlogUtil.getJSONString(0, String.valueOf(likeCount));
         } catch (Exception e) {
             logger.error(e.getMessage());

@@ -1,5 +1,6 @@
 package com.summer.blog.util;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
+import java.util.List;
 
 /**
  * @author     ：lightingSummer
@@ -129,6 +132,48 @@ public class JedisAdapter implements InitializingBean {
                 jedis.close();
             }
         }
+    }
+
+    public long lpush(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("Jedis lpush exception : " + e.getMessage());
+            return 0;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public List<String> brpop(int timeout, String key) {
+        Jedis jedis = null;
+        try {
+            jedis = getJedis();
+            return jedis.brpop(timeout, key);
+        } catch (Exception e) {
+            logger.error("Jedis brpop exception : " + e.getMessage());
+            return null;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public void setObject(String key, Object obj) {
+        set(key, JSON.toJSONString(obj));
+    }
+
+    public <T> T getObject(String key, Class<T> clazz) {
+        String obj = get(key);
+        if (obj != null) {
+            return JSON.parseObject(obj, clazz);
+        }
+        return null;
     }
 
 }
