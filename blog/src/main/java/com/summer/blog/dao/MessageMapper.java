@@ -29,4 +29,6 @@ public interface MessageMapper {
     List<Message> selectByUserId(int userId);
 
     int selectUnreadCount(@Param("userId") int userId, @Param("conversationId") String conversationId);
+
+    int updateReadByConversionId(@Param("userId") int userId, @Param("conversationId") String conversationId);
 }

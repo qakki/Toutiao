@@ -18,4 +18,6 @@ public interface MessageService {
     List<Message> getMessageByUserId(int userId, int offset, int limit);
 
     int getUnreadMsgByUserId(int userId, String conversationId);
+
+    void readMessage(int userId, String conversationId);
 }

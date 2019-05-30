@@ -34,7 +34,7 @@
     <select id="selectByUserId" resultType="com.summer.blog.model.Message">
        select     count(id) as id, from_id, to_id,content, created_date, has_read, conversation_id
        from (select * from tb_message where from_id=#{userId} or to_id=#{userId} order by id desc) tt
-       group by conversation_id order by id desc
+       group by conversation_id order by created_date desc
     </select>
     <select id="selectUnreadCount" resultType="java.lang.Integer">
         select count(0)
@@ -145,4 +145,9 @@
       conversation_id = #{conversationId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="updateReadByConversionId">
+        update tb_message
+        set has_read=1
+        where to_id=#{userId} and conversation_id=#{conversationId}
+    </update>
 </mapper>

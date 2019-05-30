@@ -173,4 +173,9 @@ public class UserServiceImpl implements UserService {
     public void logout(String ticket) {
         ticketMapper.setStatus(ticket, 1);
     }
+
+    @Override
+    public int selectIdByName(String name) {
+        return userMapper.selectByName(name).getId();
+    }
 }

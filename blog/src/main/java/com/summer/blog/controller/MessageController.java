@@ -1,5 +1,8 @@
 package com.summer.blog.controller;
 
+import com.summer.blog.async.EventModel;
+import com.summer.blog.async.EventProducer;
+import com.summer.blog.async.EventType;
 import com.summer.blog.model.HostHolder;
 import com.summer.blog.model.Message;
 import com.summer.blog.model.User;
@@ -33,10 +36,15 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     //分页待定
     @RequestMapping(path = {"/msg/detail"}, method = {RequestMethod.GET})
@@ -56,6 +64,14 @@ public class MessageController {
                 list.add(viewObject);
             }
             model.addAttribute("messages", list);
+
+            //异步处理添加消息已读
+            EventModel eventModel = new EventModel();
+            eventModel.setExts("conversationId", conversationId);
+            eventModel.setType(EventType.MESSAGE_READ);
+            eventModel.setEntityOwnerId(hostHolder.getUser().getId());
+            eventProducer.addEvent(eventModel);
+
             return "letterDetail";
         } catch (Exception e) {
             logger.error(e.getMessage());

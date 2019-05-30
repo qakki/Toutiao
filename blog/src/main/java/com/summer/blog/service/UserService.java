@@ -19,4 +19,6 @@ public interface UserService {
     String addUserLoginTicket(int userId);
 
     void logout(String ticket);
+
+    int selectIdByName(String name);
 }

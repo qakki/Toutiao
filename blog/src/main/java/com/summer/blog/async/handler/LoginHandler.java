@@ -3,15 +3,12 @@ package com.summer.blog.async.handler;
 import com.summer.blog.async.EventHandler;
 import com.summer.blog.async.EventModel;
 import com.summer.blog.async.EventType;
-import com.summer.blog.model.Blog;
 import com.summer.blog.model.Message;
-import com.summer.blog.model.User;
-import com.summer.blog.service.BlogService;
 import com.summer.blog.service.MessageService;
-import com.summer.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -22,33 +19,27 @@ import java.util.List;
  * @description：
  */
 @Component
-public class LikeHandler implements EventHandler {
+public class LoginHandler implements EventHandler {
 
     @Autowired
     private MessageService messageService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private BlogService blogService;
 
     @Override
     public void doHandle(EventModel model) {
         Message message = new Message();
         message.setFromId(1);
         message.setToId(model.getEntityOwnerId());
-        message.setConversationId("1_" + model.getEntityOwnerId());
         message.setCreatedDate(new Date());
-        //后续改成拓展成枚举 EntityType 后续可能会有点赞评论
-        User user = userService.selectNameAndUrlById(model.getActorId());
-        Blog blog = blogService.selectAllById(model.getEntityId());
-        message.setContent("您的文章" + blog.getTitle() + "被用户" + user.getName() + "赞了一下");
+        message.setConversationId("1_" + model.getEntityOwnerId());
+        Date ss = new Date();
+        SimpleDateFormat format0 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = format0.format(ss.getTime());
+        message.setContent("您的账号于" + time + "在ip地址 " + model.getExts("ip") + " 登录");
         messageService.addMessage(message);
     }
 
     @Override
     public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(EventType.LIKE);
+        return Arrays.asList(EventType.LOGIN);
     }
 }

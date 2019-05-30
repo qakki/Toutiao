@@ -40,4 +40,9 @@ public class MessageServiceImpl implements MessageService {
     public int getUnreadMsgByUserId(int userId, String conversationId) {
         return messageMapper.selectUnreadCount(userId, conversationId);
     }
+
+    @Override
+    public void readMessage(int userId, String conversationId) {
+        messageMapper.updateReadByConversionId(userId, conversationId);
+    }
 }
