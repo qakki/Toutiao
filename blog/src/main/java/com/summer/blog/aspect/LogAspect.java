@@ -31,8 +31,11 @@ public class LogAspect {
     public void servicePc() {
     }
 
+    @Pointcut("execution(* com.summer.blog.async.*.*(..))")
+    public void asyncPc() {
+    }
 
-    @Before(value = "daoPc()||controllerPc()||servicePc()")
+    @Before(value = "daoPc()||controllerPc()||servicePc()||asyncPc()")
     public void before(JoinPoint jp) {
         StringBuilder sb = new StringBuilder();
         sb.append("The params is ");
@@ -43,7 +46,7 @@ public class LogAspect {
         logger.info(name + " started. " + sb.toString());
     }
 
-    @AfterReturning(value = "daoPc()||controllerPc()||servicePc()", returning = "result")
+    @AfterReturning(value = "daoPc()||controllerPc()||servicePc()||asyncPc()", returning = "result")
     public void after(JoinPoint jp, Object result) {
         logger.info(jp.getSignature() + " completed. " + "The result is " + result);
     }
