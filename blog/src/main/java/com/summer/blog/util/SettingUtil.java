@@ -20,4 +20,15 @@ public class SettingUtil {
 
     //域名
     public static final String BLOG_DOMAIN = "http://127.0.0.1:8080/";
+
+    public static final int BLOG_PAGE_LIMIT = 10;
+
+    //审核状态
+    public static final int BLOG_REFUSE = 1;
+    public static final int BLOG_AGREE = 2;
+
+    //用户角色
+    public static final int USER_COMMON = 0;
+    public static final int USER_MANAGE = 1;
+
 }

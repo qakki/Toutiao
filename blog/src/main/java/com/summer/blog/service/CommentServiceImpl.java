@@ -18,16 +18,31 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/29 0029
+     * @description: 增加评论
+     */
     @Override
     public int addComment(Comment comment) {
         return commentMapper.insertSelective(comment);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/29 0029
+     * @description: 查看评论
+     */
     @Override
     public List<Comment> getCommentByEntity(int entityId, int entityType) {
         return commentMapper.selectByEntity(entityId, entityType);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/29 0029
+     * @description: 查看评论数量
+     */
     @Override
     public int getCommentCount(int entityId, int entityType) {
         return commentMapper.getCommentCount(entityId, entityType);

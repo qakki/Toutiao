@@ -35,25 +35,58 @@ public class BlogServiceImpl implements BlogService {
     /**
      * @author: lightingSummer
      * @date: 2019/5/24 0024
-     * @description: 用过userId查最新的blogs
-     * @param userId
-     * @param pageNum
-     * @param pageSize
+     * @description: 用过userId查最新的blogs 审核通过的
      * @return java.util.List<com.summer.blog.model.Blog>
      */
     @Override
-    public List<Blog> selectByUserIdAndTimeDesc(int userId, int pageNum, int pageSize) {
+    public List<Blog> selectByUserIdAndAuthedBlog(int userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Blog> list = blogMapper.selectByUserIdAndModTimeDesc(userId);
+        List<Blog> list = blogMapper.selectByUserIdAndModTimeDescAndAudiStatus(userId, 2);
         return list;
+    }
+
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 查询最新审核中的blog
+     * @return java.util.List<com.summer.blog.model.Blog>
+     */
+    public List<Blog> selectNeedAuthBlog(int userId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Blog> list = blogMapper.selectByUserIdAndModTimeDescAndAudiStatus(userId, 0);
+        return list;
+    }
+
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description:
+     * @param id newsId
+     * @param status 审核状态 0审核中 1拒绝 2通过
+     */
+    @Override
+    public void authBlog(int id, int status) {
+        Blog blog = new Blog();
+        blog.setId(id);
+        blog.setAudiStatus(status);
+        blogMapper.updateByPrimaryKeySelective(blog);
+    }
+
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @return int 查询拥有的总页数
+     */
+    @Override
+    public int getTotalPageNum(int userId) {
+        int blogCount = blogMapper.selectCountByUserId(userId, 2);
+        return (int) Math.ceil(blogCount / SettingUtil.BLOG_PAGE_LIMIT) + 1;
     }
 
     /**
      * @author: lightingSummer
      * @date: 2019/5/24 0024
      * @description: 保存图片
-     * @param file
-     * @return java.lang.String
      */
     @Override
     public String saveImage(MultipartFile file) {
@@ -83,26 +116,51 @@ public class BlogServiceImpl implements BlogService {
 
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 添加blog
+     */
     @Override
     public void saveBlog(Blog blog) {
         blogMapper.insertSelective(blog);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 通过主键查询blog link
+     */
     @Override
     public String selectLinkById(int id) {
         return blogMapper.selectLinkById(id);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 通过主键查询blog
+     */
     @Override
     public Blog selectAllById(int id) {
         return blogMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 通过主键更新blog
+     */
     @Override
     public void updateById(Blog blog) {
         blogMapper.updateByPrimaryKeySelective(blog);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 更新点赞数量
+     */
     @Override
     public void updateLikeCount(int id, String likeCount) {
         Blog blog = new Blog();

@@ -12,9 +12,10 @@
         <result column="mod_time" jdbcType="TIMESTAMP" property="modTime"/>
         <result column="is_del" jdbcType="INTEGER" property="isDel"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="audi_status" jdbcType="INTEGER" property="audiStatus"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, title, link, image, like_count, comment_count,add_time, mod_time, is_del, user_id
+    id, title, link, image, like_count, comment_count,add_time, mod_time, is_del, user_id,audi_status
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -23,7 +24,7 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <sql id="Main_Page_List">
-     id,title, link, image, like_count,comment_count, mod_time, user_id
+     id,title, link, image, like_count,comment_count, mod_time, user_id,audi_status
   </sql>
     <resultMap id="Main_Page_Map" type="com.summer.blog.model.Blog">
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -34,16 +35,17 @@
         <result column="comment_count" property="commentCount"/>
         <result column="mod_time" property="modTime"/>
         <result column="user_id" property="userId"/>
+        <result column="audi_status" property="audiStatus"/>
     </resultMap>
-    <select id="selectByUserIdAndModTimeDesc" parameterType="java.lang.Integer" resultMap="Main_Page_Map">
+    <select id="selectByUserIdAndModTimeDescAndAudiStatus" resultMap="Main_Page_Map">
         select
         <include refid="Main_Page_List"/>
         from tb_blog
         where
-        <if test="_parameter!=0">
+        <if test="userId!=0">
             user_id=#{userId} and
         </if>
-        is_del=0
+        is_del=0 and audi_status=#{audiStatus}
         order by mod_time desc
     </select>
     <select id="selectLinkById" parameterType="java.lang.Integer" resultType="java.lang.String">
@@ -55,6 +57,18 @@
         is_del=0
     </select>
 
+    <select id="selectCountByUserId" resultType="java.lang.Integer">
+        select
+        count(0)
+        from tb_blog
+        where
+        <if test="userId!=0">
+            user_id=#{userId} and
+        </if>
+        is_del=0 and audi_status=#{audiStatus}
+        order by mod_time desc
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_blog
     where id = #{id,jdbcType=INTEGER}
@@ -62,11 +76,12 @@
     <insert id="insert" parameterType="com.summer.blog.model.Blog">
     insert into tb_blog (id, title, link, 
       image, like_count, add_time, 
-      mod_time, is_del, user_id
+      mod_time, is_del, user_id,audi_status
       )
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}, 
       #{image,jdbcType=VARCHAR}, #{likeCount,jdbcType=VARCHAR},#{commentCount,jdbcType=INTEGER} #{addTime,jdbcType=TIMESTAMP},
-      #{modTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}
+      #{modTime,jdbcType=TIMESTAMP}, #{isDel,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{audiStatus,jdbcType=INTEGER}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.summer.blog.model.Blog">
@@ -102,6 +117,9 @@
             <if test="userId != null">
                 user_id,
             </if>
+            <if test="audiStatus != null">
+                user_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -133,6 +151,9 @@
             </if>
             <if test="userId != null">
                 #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="audi_status != null">
+                #{audiStatus,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -166,6 +187,9 @@
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
+            <if test="audiStatus != null">
+                audi_status = #{audiStatus,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -179,7 +203,8 @@
       add_time = #{addTime,jdbcType=TIMESTAMP},
       mod_time = #{modTime,jdbcType=TIMESTAMP},
       is_del = #{isDel,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER}
+      user_id = #{userId,jdbcType=INTEGER},
+      audi_status = #{audiStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

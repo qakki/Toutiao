@@ -19,17 +19,32 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageMapper messageMapper;
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 添加站内信
+     */
     @Override
     public int addMessage(Message message) {
         return messageMapper.insertSelective(message);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 查询站内信详细内容
+     */
     @Override
     public List<Message> getConversationDetail(String conversationId, int offset, int limit) {
         PageHelper.startPage(offset, limit);
         return messageMapper.selectByConversionId(conversationId);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 查询站内信列表
+     */
     @Override
     public List<Message> getMessageByUserId(int userId, int offset, int limit) {
         PageHelper.startPage(offset, limit);

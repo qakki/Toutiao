@@ -14,4 +14,6 @@ public class User {
 
     private String headUrl;
 
+    private Integer auth;
+
 }

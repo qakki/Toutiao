@@ -1,6 +1,5 @@
 package com.summer.blog.controller;
 
-import com.summer.blog.aspect.LogAspect;
 import com.summer.blog.async.EventModel;
 import com.summer.blog.async.EventProducer;
 import com.summer.blog.async.EventType;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 @Controller
 public class LoginController {
-    private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private UserService userService;

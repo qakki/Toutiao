@@ -36,24 +36,33 @@ public class HomeController {
     @Autowired
     private LikeService likeService;
 
+
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model,
-                        @RequestParam(value = "pop", defaultValue = "0") int pop) {
-        List<ViewObject> list = getNews(0, 1, 10);
-        model.addAttribute("vos", list);
-        model.addAttribute("pop", pop);
+                        @RequestParam(value = "pop", defaultValue = "0") int pop,
+                        @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageCount = blogService.getTotalPageNum(0);
+        if (page <= pageCount && page >= 0) {
+            List<ViewObject> list = getNews(0, page, SettingUtil.BLOG_PAGE_LIMIT);
+            model.addAttribute("vos", list);
+            model.addAttribute("pop", pop);
+        }
         return "home";
     }
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-    public String userIndex(Model model, @PathVariable int userId) {
-        List<ViewObject> list = getNews(userId, 1, 10);
-        model.addAttribute("vos", list);
+    public String userIndex(Model model, @PathVariable int userId,
+                            @RequestParam(value = "page", defaultValue = "1") int page) {
+        int pageCount = blogService.getTotalPageNum(userId);
+        if (page <= pageCount && page >= 0) {
+            List<ViewObject> list = getNews(userId, page, SettingUtil.BLOG_PAGE_LIMIT);
+            model.addAttribute("vos", list);
+        }
         return "home";
     }
 
     private List<ViewObject> getNews(int userId, int offset, int limit) {
-        List<Blog> blogs = blogService.selectByUserIdAndTimeDesc(userId, offset, limit);
+        List<Blog> blogs = blogService.selectByUserIdAndAuthedBlog(userId, offset, limit);
         int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
         List<ViewObject> list = new ArrayList<>();
         for (Blog blog : blogs) {

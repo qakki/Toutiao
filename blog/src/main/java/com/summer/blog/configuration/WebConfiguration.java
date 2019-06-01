@@ -1,6 +1,8 @@
 package com.summer.blog.configuration;
 
 import com.summer.blog.interceptor.LoginRequiredInterceptor;
+import com.summer.blog.interceptor.ManageFilter;
+import com.summer.blog.interceptor.MsgAuthFilter;
 import com.summer.blog.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,12 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     private LoginRequiredInterceptor loginRequiredInterceptor;
 
+    @Autowired
+    private ManageFilter manageFilter;
+
+    @Autowired
+    private MsgAuthFilter msgAuthFilter;
+
     /**
      * @author: lightingSummer
      * @date: 2019/5/27 0027
@@ -31,8 +39,10 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(passportInterceptor);
-        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting*");
-        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/msg*");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/content/*");
+        registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/msg/*");
+        registry.addInterceptor(manageFilter).addPathPatterns("/manage/*");
+        registry.addInterceptor(msgAuthFilter).addPathPatterns("/msg/detail");
         super.addInterceptors(registry);
     }
 }

@@ -7,9 +7,10 @@
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="head_url" jdbcType="VARCHAR" property="headUrl"/>
+        <result column="auth" jdbcType="INTEGER" property="auth"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, password, salt, head_url
+    id, name, password, salt, head_url,auth
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -18,12 +19,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <sql id="NameAndUrl_Column_List">
-    id, name, head_url
+    id, name, head_url,auth
   </sql>
     <resultMap id="NameAndUrlResultMap" type="com.summer.blog.model.User">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="head_url" jdbcType="VARCHAR" property="headUrl"/>
+        <result column="auth" jdbcType="INTEGER" property="auth"/>
     </resultMap>
     <select id="selectNameAndUrlById" resultType="com.summer.blog.model.User" resultMap="NameAndUrlResultMap">
         select

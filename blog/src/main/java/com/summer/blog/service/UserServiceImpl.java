@@ -169,11 +169,21 @@ public class UserServiceImpl implements UserService {
         return resTicket;
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 退出
+     */
     @Override
     public void logout(String ticket) {
         ticketMapper.setStatus(ticket, 1);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/6/1 0001
+     * @description: 通过name查询用户
+     */
     @Override
     public int selectIdByName(String name) {
         return userMapper.selectByName(name).getId();

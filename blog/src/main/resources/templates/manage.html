@@ -1,0 +1,53 @@
+#parse("header.html")
+<div id="main">
+    <div class="container">
+        <ul class="letter-list">
+            #foreach($vo in $vos)
+            <li id="conversation-item-10005_622873">
+                <a class="letter-link"
+                   href="${vo.blog.link}"></a>
+                <div class="letter-info">
+                    <span class="l-time">$!date.format('yyyy-MM-dd HH:mm:ss', $!{vo.blog.modTime})</span>
+                    <div class="l-operate-bar">
+                        <a class="sns-action-del" data-id="10005_622873" href="javascript:void(0);">
+                            通过
+                        </a>
+                        <a class="sns-action-del" data-id="10005_622873" href="javascript:void(0);">
+                            拒绝
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <img alt="" class="content-img" src="$!{vo.blog.image}">
+                </div>
+                <div class="content-main">
+                    <h5 class="title">
+                        <a href=$!{vo.blog.link} rel="external nofollow"
+                           target="_blank">$!{vo.blog.title}</a>
+                    </h5>
+                    <div class="meta">
+                        分享人：$!{vo.user.name}
+                    </div>
+                </div>
+                <!--
+                <div class="chat-headbox">
+                    <a class="list-head">
+                        <img alt="头像" class="content-img" src="$!{vo.blog.image}" width="50">
+                    </a>
+                </div>
+                <div class="letter-detail">
+                    <a class="letter-name level-color-1" title="$!{vo.user.name}">
+                        $!{vo.user.name}
+                    </a>
+                    <p class="letter-brief">
+                        <a href="/msg/detail?conversationId=$!{vo.blog.link}">
+                            链接点我
+                        </a>
+                    </p>
+                </div>-->
+            </li>
+            #end
+        </ul>
+
+    </div>
+    #parse("footer.html")

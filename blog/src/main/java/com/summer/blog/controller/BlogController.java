@@ -47,7 +47,7 @@ public class BlogController {
     @Autowired
     private LikeService likeService;
 
-    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+    @RequestMapping(value = "/content/uploadImage", method = RequestMethod.POST)
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         try {
@@ -63,7 +63,7 @@ public class BlogController {
         }
     }
 
-    @RequestMapping(value = "/user/addNews", method = RequestMethod.POST)
+    @RequestMapping(value = "/content/addNews", method = RequestMethod.POST)
     @ResponseBody
     public String addBlog(@RequestParam("image") String image,
                           @RequestParam("title") String title,
@@ -100,7 +100,7 @@ public class BlogController {
         }
     }
 
-    @RequestMapping(value = "/addComment", method = RequestMethod.POST)
+    @RequestMapping(value = "/content/addComment", method = RequestMethod.POST)
     public String addComment(@RequestParam("newsId") int newsId, @RequestParam("content") String content) {
         try {
             Comment comment = new Comment();

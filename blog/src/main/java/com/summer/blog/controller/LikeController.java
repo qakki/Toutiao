@@ -39,7 +39,7 @@ public class LikeController {
     @Autowired
     private EventProducer eventProducer;
 
-    @RequestMapping(value = "/like", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/content/like", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String like(@RequestParam("newsId") int newsId) {
         try {
@@ -63,7 +63,7 @@ public class LikeController {
         }
     }
 
-    @RequestMapping(value = "/dislike", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/content/dislike", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String dislike(@RequestParam("newsId") int newsId) {
         try {

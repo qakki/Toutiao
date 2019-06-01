@@ -11,7 +11,13 @@ import java.util.List;
  * @description：
  */
 public interface BlogService {
-    List<Blog> selectByUserIdAndTimeDesc(int id, int page, int size);
+    List<Blog> selectByUserIdAndAuthedBlog(int userId, int pageNum, int pageSize);
+
+    List<Blog> selectNeedAuthBlog(int userId, int pageNum, int pageSize);
+
+    void authBlog(int id, int status);
+
+    int getTotalPageNum(int userId);
 
     String saveImage(MultipartFile file);
 

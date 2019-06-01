@@ -26,4 +26,7 @@ public class Blog {
 
     private Integer userId;
 
+    //0审核中 1审核拒绝 2审核通过
+    private Integer audiStatus;
+
 }

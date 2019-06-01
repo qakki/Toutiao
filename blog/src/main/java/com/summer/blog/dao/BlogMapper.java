@@ -2,6 +2,7 @@ package com.summer.blog.dao;
 
 import com.summer.blog.model.Blog;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,7 +22,10 @@ public interface BlogMapper {
 
     int updateByPrimaryKey(Blog record);
 
-    List<Blog> selectByUserIdAndModTimeDesc(Integer userId);
+    List<Blog> selectByUserIdAndModTimeDescAndAudiStatus(@Param("userId") Integer userId, @Param("audiStatus") Integer audiStatus);
 
     String selectLinkById(Integer id);
+
+    int selectCountByUserId(@Param("userId") Integer userId, @Param("audiStatus") Integer audiStatus);
+
 }

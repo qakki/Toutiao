@@ -1,5 +1,5 @@
 /**
-var oPopupUpload = new PopupUpload({
+ var oPopupUpload = new PopupUpload({
     
 });
  */
@@ -13,20 +13,20 @@ var oPopupUpload = new PopupUpload({
     Base.mix(PopupUpload, Component, {
         _tpl: [
             '<div>',
-              '<div class="form-group">',
-                '<div class="form-group">',
-                    '<label class="col-sm-2 control-label">上传图片</label>',
-                    '<div class="js-image-container col-sm-10">',
-                        '<a href="javascript:void(0);" class="btn btn-info btn-upload js-upload-btn" style="diplay:inline-block;position:relative;">上传图片</a>',
-                    '</div>',
-                '</div>',
-                  '<div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><input class="js-title form-control" type="text"></div></div>',
-                  '<div class="form-group"><label class="col-sm-2 control-label">链接</label><div class="col-sm-10"><input class="js-link form-control" type="text"></div></div>',
-                  '<div class="form-group">',
-                        '<div class="col-lg-10 col-lg-offset-2">',
-                            '<input type="submit" value="提交" class="js-submit btn btn-default btn-info">',
-                        '</div>',
-                    '</div>',
+            '<div class="form-group">',
+            '<div class="form-group">',
+            '<label class="col-sm-2 control-label">上传图片</label>',
+            '<div class="js-image-container col-sm-10">',
+            '<a href="javascript:void(0);" class="btn btn-info btn-upload js-upload-btn" style="diplay:inline-block;position:relative;">上传图片</a>',
+            '</div>',
+            '</div>',
+            '<div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><input class="js-title form-control" type="text"></div></div>',
+            '<div class="form-group"><label class="col-sm-2 control-label">链接</label><div class="col-sm-10"><input class="js-link form-control" type="text"></div></div>',
+            '<div class="form-group">',
+            '<div class="col-lg-10 col-lg-offset-2">',
+            '<input type="submit" value="提交" class="js-submit btn btn-default btn-info">',
+            '</div>',
+            '</div>',
             '</div>'].join(''),
         listeners: [{
             name: 'render',
@@ -37,7 +37,7 @@ var oPopupUpload = new PopupUpload({
                 var oUploadBtn = oEl.find('a.js-upload-btn');
                 new Upload({
                     targetEl: oUploadBtn,
-                    url: '/uploadImage/',
+                    url: '/content/uploadImage/',
                     check: function (oFile, sType, nFileSize) {
                         var sMsg = nFileSize === 0 ? '文件大小不能为0' : /image/gi.test(sType || '') ? '' : '文件格式不正确';
                         sMsg && alert(sMsg);
@@ -74,7 +74,7 @@ var oPopupUpload = new PopupUpload({
                 }
                 that.requesting = true;
                 $.ajax({
-                    url: '/user/addNews/',
+                    url: '/content/addNews/',
                     method: 'post',
                     data: {image: that.image, title: sTitle, link: sLink},
                     dataType: 'json'
@@ -116,9 +116,9 @@ var oPopupUpload = new PopupUpload({
         var oEl = that.getEl();
         var sHtml = [
             '<div class="letter-pic-box">',
-                '<a href="javascript:void(0);" class="icon-remove-circle"></a>',
-                '<div class="mask"></div>',
-                '<img src="' + sUrl + '">',
+            '<a href="javascript:void(0);" class="icon-remove-circle"></a>',
+            '<div class="mask"></div>',
+            '<img src="' + sUrl + '">',
             '</div>'].join('');
         oEl.find('div.letter-pic-box').remove();
         oEl.find('div.js-image-container').prepend(sHtml);

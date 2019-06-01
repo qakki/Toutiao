@@ -137,7 +137,7 @@ public class BlogApplicationTests {
 
     @Test
     public void blogTest() {
-        List<Blog> list = blogService.selectByUserIdAndTimeDesc(0, 1, 2);
+        List<Blog> list = blogService.selectByUserIdAndAuthedBlog(0, 1, 2);
         StringBuilder sb = new StringBuilder();
         for (Blog blog : list) {
             sb.append("blog.getId()" + blog.getId() + "\t");

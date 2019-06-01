@@ -31,6 +31,11 @@ public class LikeService {
         }
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/29 0029
+     * @description: 点赞
+     */
     public long like(int userId, int entityType, int entityId) {
         String likeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
         String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId);
@@ -39,6 +44,11 @@ public class LikeService {
         return jedisAdapter.scard(likeKey);
     }
 
+    /**
+     * @author: lightingSummer
+     * @date: 2019/5/29 0029
+     * @description: 点踩
+     */
     public long dislike(int userId, int entityType, int entityId) {
         String likeKey = RedisKeyUtil.getLikeKey(entityType, entityId);
         String dislikeKey = RedisKeyUtil.getDislikeKey(entityType, entityId);

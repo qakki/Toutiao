@@ -73,7 +73,7 @@
         <div class="post-comment-form">
             #if($user)
             <span>评论 ($!{news.commentCount})</span>
-            <form action="/addComment" method="post">
+            <form action="/content/addComment" method="post">
                 <input name="newsId" type="hidden" value="$!{news.id}">
 
                 <div class="form-group text required comment_content">
