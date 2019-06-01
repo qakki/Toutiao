@@ -10,6 +10,7 @@ Record nowcoder project study
       · 用户密码强度检验  
       · 密码salt+md5加密  
       · 未登录权限控制，通过interceptor拦截器实现  
+      · 各种登录权限控制，以及用户管理员权限分离，msg私密拦截
       · 每次登陆发送站内信，记录时间ip，异步操作  
       · 已登陆用户加cookie，数据库备份token  
       · 退出用户token失效  
@@ -37,3 +38,7 @@ Record nowcoder project study
     8. 云服务器部署  
       · 部署在腾讯云服务器Tomcat+Nginx转发  
       · 域名花了1块钱买了一年  
+    9. 管理员后台
+      · 管理员角色配置管理员后台入口
+      · 增加管理员审核，所有的资讯发布要通过管理员审核
+
