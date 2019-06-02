@@ -21,17 +21,19 @@
             fClickLogin();
         }
     }
+
     function fClickShare() {
         var that = this;
-            PopupUpload.show({
-                listeners: {
-                    done: function () {
-                        //alert('login');
-                        window.location.reload();
-                    }
+        PopupUpload.show({
+            listeners: {
+                done: function () {
+                    //alert('login');
+                    window.location.reload();
                 }
-            });
+            }
+        });
     }
+
     function fClickLogin() {
         var that = this;
         PopupLogin.show({
@@ -65,7 +67,7 @@
                 oEl.parent().find('.click-dislike').removeClass('pressed');
             },
             error: function () {
-                alert('出现错误，请重试');
+                alert('点赞失败，请登录');
             },
             always: function () {
                 that.actioning = false;
@@ -91,7 +93,7 @@
                 oLikeBtn.find('span.count').html(oResult.msg);
             },
             error: function () {
-                alert('出现错误，请重试');
+                alert('点踩失败，请登录');
             },
             always: function () {
                 that.actioning = false;
