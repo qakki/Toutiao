@@ -9,10 +9,10 @@
                 <div class="letter-info">
                     <span class="l-time">$!date.format('yyyy-MM-dd HH:mm:ss', $!{vo.blog.modTime})</span>
                     <div class="l-operate-bar">
-                        <a class="sns-action-del" data-id="10005_622873" href="javascript:void(0);">
+                        <a data-id="${vo.blog.id}" href="javascript:void(0);" id="share_agree">
                             通过
                         </a>
-                        <a class="sns-action-del" data-id="10005_622873" href="javascript:void(0);">
+                        <a data-id="${vo.blog.id}" href="javascript:void(0);" id="share_refuse">
                             拒绝
                         </a>
                     </div>
@@ -48,6 +48,6 @@
             </li>
             #end
         </ul>
-
+        <script src="/scripts/main/site/manage.js" type="text/javascript"></script>
     </div>
     #parse("footer.html")
