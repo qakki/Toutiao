@@ -6,6 +6,7 @@ import com.summer.blog.async.EventType;
 import com.summer.blog.service.UserService;
 import com.summer.blog.util.BlogUtil;
 import com.summer.blog.util.IpUtil;
+import com.summer.blog.util.SettingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,6 @@ public class LoginController {
     @RequestMapping(value = "/logout/", method = {RequestMethod.GET, RequestMethod.POST})
     public String logout(@CookieValue("ticket") String ticket) {
         userService.logout(ticket);
-        return "redirect:/";
+        return "redirect:" + SettingUtil.BLOG_DOMAIN;
     }
 }

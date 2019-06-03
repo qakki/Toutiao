@@ -1,6 +1,7 @@
 package com.summer.blog.interceptor;
 
 import com.summer.blog.model.HostHolder;
+import com.summer.blog.util.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +24,7 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         if (hostHolder.getUser() == null) {
-            httpServletResponse.sendRedirect("/?pop=1");
+            httpServletResponse.sendRedirect(SettingUtil.BLOG_DOMAIN + "/?pop=1");
             return false;
         }
         return true;
