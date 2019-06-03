@@ -19,7 +19,7 @@ public class SettingUtil {
     public static final String NATIVE_IMAGE_DIR = "E:/JavaTest/";
 
     //域名
-    public static final String BLOG_DOMAIN = "http://127.0.0.1:8080/";
+    public static final String BLOG_DOMAIN = "https://blog.lightingsummer.club/";
 
     public static final int BLOG_PAGE_LIMIT = 10;
 
