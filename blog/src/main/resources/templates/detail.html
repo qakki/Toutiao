@@ -101,7 +101,8 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">
-                        <small class="date">$date.format('yyyy-MM-dd HH:mm:ss', $!{commentvo.comment.addTime})
+                        <small class="date">${commentvo.user.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                            $date.format('yyyy-MM-dd HH:mm:ss', $!{commentvo.comment.addTime})
                         </small>
                     </h4>
                     <div>$!{commentvo.comment.content}</div>
