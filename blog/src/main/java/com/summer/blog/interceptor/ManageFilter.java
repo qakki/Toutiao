@@ -24,7 +24,7 @@ public class ManageFilter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         if (hostHolder.getUser().getAuth() != SettingUtil.USER_MANAGE) {
-            httpServletResponse.sendRedirect("/noauth");
+            httpServletResponse.sendRedirect(SettingUtil.BLOG_DOMAIN + "/noauth");
             return false;
         }
         return true;
