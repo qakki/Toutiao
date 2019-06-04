@@ -1,6 +1,7 @@
 package com.summer.blog.interceptor;
 
 import com.summer.blog.model.HostHolder;
+import com.summer.blog.util.SettingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -39,7 +40,7 @@ public class MsgAuthFilter implements HandlerInterceptor {
                 }
             }
         }
-        httpServletResponse.sendRedirect("/noauth");
+        httpServletResponse.sendRedirect(SettingUtil.BLOG_DOMAIN + "/noauth");
         return false;
     }
 

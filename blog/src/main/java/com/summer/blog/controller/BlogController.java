@@ -3,6 +3,7 @@ package com.summer.blog.controller;
 import com.summer.blog.model.*;
 import com.summer.blog.service.*;
 import com.summer.blog.util.BlogUtil;
+import com.summer.blog.util.SettingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class BlogController {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return "redirect:/news/" + newsId;
+        return "redirect:" + SettingUtil.BLOG_DOMAIN + "/news/" + newsId;
     }
 
     @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
